@@ -1,0 +1,329 @@
+123456789                   Integers
+i = "\d+"
+123,456,789                 Grouped Integers
+gi = "\d{1,3}(?:,\d{3})+"
+123456.789                  Decimals
+d = "\d+(?:\.\d+)?"
+123,456.789                 Grouped Decimals
+gd = "\d{1,3}(?:,\d{3})+(?:\.\d+)?"
+grp = r"(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?"
+
+grp = f"(?:{gi}|\d+)" + f
+
+
+-123456789                  Negative Integers
+"[+-−]?\d+"
+-123,456,789                Negative Grouped Integers
+"[+-−]?\d{1,3}(?:,\d{3})+"
+-123456.789                 Negative Decimals
+"[+-−]?\d+(?:\.\d+)?"
+-123,456.789                Negative Grouped Decimals
+"[+-−]?\d{1,3}(?:,\d{3})+(?:\.\d+)?"
+sgn = r"[+-−]?----(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?"
+sgn = r"[+-−]?" + grp
+sgn = s + grp
+
+
+123456789%                  Percentage Integers
+123,456,789%                Percentage Grouped Integers
+123456.789%                 Percentage Decimals
+123,456.789%                Percentage Grouped Decimals
+
+-123456789%                 (Negative Percentages)
+-123,456,789%
+-123456.789%
+-123,456.789%
+per = r"[+-−]?----(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?----%?"
+per = sgn + r"%?"
+
+
+123456789$                   (Suffix Currency)
+123,456,789$
+123456.789$
+123,456.789$
+
+-123456789$                   (Negative Suffix Currency)
+-123,456,789$
+-123456.789$
+-123,456.789$
+
+$123456789                   (Prefix Currency)
+$123,456,789
+$123456.789
+$123,456.789
+
+-$123456789                   Negative Prefix Currency Integers
+-$123,456,789                 Negative Prefix Currency Grouped Integers
+-$123456.789                  Negative Prefix Currency Decimals
+-$123,456.789                 Negative Prefix Currency Grouped Decimals
+cur = r"[+-−]?----[$€]?----(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?----[$€]?"
+cur = r"[+-−]?" + r"[$€]?" + grp + r"[$€]?"
+cur = s + r"[$€]?" + grp + r"[$€]?"
+
+Scientific Notations, Fractions, Exponents, Hyphen
+opn = r"[+-−]?----(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?----[eE/^]?----[+-−]?----(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?"
+opn = sgn +r"[eE/^]?" + sgn #1,2341,234
+ocp = r"[+-−]?----[$€]?----(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?----[eE/^]?----[+-−]?----(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?----[$€]?----%?"
+ocp = s + c + grp + r"[eE/^]?" + sgn + c + p
+
+-12e34                          Signed scientific   
+12E-34
+
+-1.2e34                         Left Decimal Scientific
+1.2E-34
+
+-1,234e56                       Left Grouped Integers Scientific
+1,234E-56
+
+-1,234.5e56                     Left Grouped Decimals Scientific
+1,234.5E-56
+
+Special Cases
+-$1,234.5e56                    Left Grouped Decimals Scientific Prefix Currency
+1,234.5E-56$                    Left Grouped Decimals Scientific Suffix Currency
+-1,234.5e56%                    Left Grouped Decimals Scientific Percentage
+
+(Doesnt seem right)
+-1,234e5,678 
+1,234E-5,678
+
+(Doesnt seem right")
+-1.2e3.4
+1.2E-3.4
+
+(Doesnt seem right)
+-1/2e34
+1/2E-34
+
+-12/34                          Fractions 
+12/-34
+
+-1.2/34                         Left Decimal Fraction
+1.2/-34
+
+-1,234/56                       Left Grouped Integers Fraction
+1,234E-56
+
+-1,234.5/56                     Left Grouped Decimals Fraction
+1,234.5/-56
+
+-1,234/5,678                    Right Grouped Integers Fraction   -> Use group               
+1,234/-5,678
+
+-1.2/3.4                        Right Decimal Fraction            -> Use Group
+1.2/-3.4
+
+-$1,234.5/56                    Left Grouped Decimals Fraction Prefix Currency
+1,234.5/-56$                    Left Grouped Decimals Fraction Suffix Currency
+-1,234.5/56%                    Left Grouped Decimals Fraction Percentage
+
+(Doesnt seem right)
+-1/2/34
+1/2/-34
+
+-12^34                          Exponents 
+12^-34
+
+-1.2^34                         Left Decimal Exponents
+1.2^-34
+
+-1,234^56                       Left Grouped Integers Exponents
+1,234^-56
+
+-1,234.5^56                     Left Grouped Decimals Exponents
+1,234.5^-56
+
+-$1,234.5^56                    Left Grouped Decimals Exponent Prefix Currency
+1,234.5^-56$                    Left Grouped Decimals Exponent Suffix Currency
+-1,234.5^56%                    Left Grouped Decimals Exponent Percentage
+
+(Doesnt seem right)
+-1,234^5,678             
+1,234^-5,678
+
+-1.2^3.4                        Right Decimal Exponents            -> Use Group
+1.2^-3.4
+
+(Doesnt seem right)
+-1/2^34
+1/2^-34
+
+Should honestly be picked up by the signed grouping
+-12-34                          Hyphens 
+12--34
+
+-1.2-34                         Left Decimal Hyphens
+1.2--34
+
+-1,234_56                       Left Grouped Integers Hyphens
+1,234--56
+
+-1,234.5-56                     Left Grouped Decimals Hyphens
+1,234.5--56
+
+-1,234-5,678                    Right Grouped Integers Hyphens   -> Use group      
+1,234--5,678
+
+-1.2-3.4                        Right Decimal Hyphens            -> Use Group
+1.2--3.4
+
+(Doesnt seem right)
+-1/2-34
+1/2--34
+
+
+(123456789)                  Bracket Integers
+(123,456,789)                Bracket Grouped Integers
+(123456.789)                 Bracket Decimals
+(123,456.789)                Bracket Grouped Decimals
+
+Negative Inside or out works here -(-i)
+-(123456789)                  Negative Integers
+-(123,456,789)                Negative Grouped Integers
+(-123456.789)                 Negative Decimals
+-(-123,456.789)               Negative Grouped Decimals
+brc = r"[+-−]?----\(----[+-−]?----(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?----\)"
+brc = s + r"\(" + sgn + r"\)"
+
+(123456789%)                  Percentage Integers
+(123,456,789)%                Percentage Grouped Integers
+(123456.789%)                 Percentage Decimals
+123,456.789%                Percentage Grouped Decimals
+
+-123456789                 (Negative Percentages)
+-123,456,789%
+-123456.789%
+-123,456.789%
+
+(123456789$)                   (Suffix Currency)
+(123,456,789)$
+(123456.789$)
+123,456.789$
+
+-123456789$                   (Negative Suffix Currency)
+-123,456,789$
+-123456.789$
+-123,456.789$
+
+($123456789)                   (Prefix Currency)
+$(123,456,789)
+$123456.789
+$123,456.789
+
+-$123456789                   Negative Prefix Currency Integers
+-$123,456,789                 Negative Prefix Currency Grouped Integers
+-$123456.789                  Negative Prefix Currency Decimals
+-$123,456.789                 Negative Prefix Currency Grouped Decimals
+
+bcp = r"[+-−]?----\(----[+-−]?----[$€]?----(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?----[$€]?----%?----\)"
+bcp = s + r"\(" s + c + grp + c + p + r"\)"
+bcp = s + r"\(" + cur + p + r"\)"
+
+
+Scientific Notations, Fractions, Exponents, Hyphen
+bop = r"[+-−]?----[$€]?----\(----[+-−]?----(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?----[eE/^]?----[+-−]?----(?:\d{1,3}(?:,\d{3})+|\d+)----(?:\.\d+)?----\)----[$€]?----%?"
+bop = s + c + r"\(" + sgn + r"[eE/^]?" + sgn + r"\)" + c + p
+bop = s + c + r"\(" + opn + r"\)" + c + p
+
+-(12e34)                          Signed scientific   
+(12E-34)
+
+(-1.2e34)                         Left Decimal Scientific
+(1.2E-34)
+
+-(1,234e56)                       Left Grouped Integers Scientific
+(1,234E-56)
+
+(-1,234.5e56)                     Left Grouped Decimals Scientific
+(1,234.5E-56)
+
+(Doesnt seem right)
+-1,234e5,678 
+1,234E-5,678
+
+(Doesnt seem right")
+-1.2e3.4
+1.2E-3.4
+
+(Doesnt seem right)
+-1/2e34
+1/2E-34
+
+(-12/34)                          Fractions 
+(12/-34)
+
+(-1.2/34)                         Left Decimal Fraction
+(1.2/-34)
+
+(-1,234/56)                       Left Grouped Integers Fraction
+(1,234E-56)
+
+-$(1,234.5/56)                     Left Grouped Decimals Fraction
+(1,234.5/-56)
+
+(-1,234/5,678)                    Right Grouped Integers Fraction   -> Use group               
+(1,234/-5,678)
+
+(-1.2/3.4)                        Right Decimal Fraction            -> Use Group
+(1.2/-3.4)
+
+(Doesnt seem right)
+-1/2/34
+1/2/-34
+
+(-12^34)                          Exponents 
+(12^-34)
+
+-(1.2^34)                         Left Decimal Exponents
+(1.2^-34)
+
+(-1,234^56)                       Left Grouped Integers Exponents
+(1,234^-56)
+
+(-1,234.5^56)                     Left Grouped Decimals Exponents
+(1,234.5^-56)
+
+(Doesnt seem right)
+(-1,234^5,678)             
+(1,234^-5,678)
+
+-1.2^3.4                        Right Decimal Exponents            -> Use Group
+1.2^-3.4
+
+(Doesnt seem right)
+-1/2^34
+1/2^-34
+
+(-12-34)                          Hyphens 
+(12--34)
+
+-(1.2-34)                         Left Decimal Hyphens
+(1.2--34)
+
+(-1,234-56)                       Left Grouped Integers Hyphens
+(1,234--56)
+
+(-1,234.5-56)                     Left Grouped Decimals Hyphens
+(1,234.5--56)
+
+(-1,234-5,678)                    Right Grouped Integers Hyphens   -> Use group      
+(1,234--5,678)
+
+(-1.2-3.4)                        Right Decimal Hyphens            -> Use Group
+(1.2--3.4)
+
+(Doesnt seem right)
+-1/2-34
+1/2--34
+
+DELIMETERS AND SEPARATED VALUES
+glm = r"(?:\d[.:/-_])+\d"
+
+SEPARATED VALUES
+# 1,234.6,4,345  2;-(-3,330);5.3;57 (1,514.2)-1,234-4 
+
+# (1,234),-(56.78),(912),3456,(7,891$),-$(234,567),(89%)
+# (1,234);-(56.78);(912);3456;(7,891$);-$(234,567);(89%)
+# (1,234)--(56.78)-(912)-3456-(7,891$)--$(234,567)-(89%)
+
+svl = r"(?:" + bcp + r"[,;-])" + bcp
